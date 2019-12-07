@@ -1,6 +1,6 @@
 package com.sparknetworks.personalitytest.controller;
 
-import com.sparknetworks.personalitytest.domain.Question;
+import com.sparknetworks.personalitytest.domain.question.Question;
 import com.sparknetworks.personalitytest.exception.CategoryNotFoundException;
 import com.sparknetworks.personalitytest.service.PersonalityTestService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.sparknetworks.personalitytest.service;
 
-import com.sparknetworks.personalitytest.domain.*;
+import com.sparknetworks.personalitytest.domain.question.*;
 import com.sparknetworks.personalitytest.repository.PersonalityTestRepository;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package com.sparknetworks.personalitytest.service;
 
 import com.sparknetworks.personalitytest.repository.PersonalityTestRepository;
-import com.sparknetworks.personalitytest.domain.Question;
+import com.sparknetworks.personalitytest.domain.question.Question;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

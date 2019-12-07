@@ -1,4 +1,4 @@
-package com.sparknetworks.personalitytest.domain;
+package com.sparknetworks.personalitytest.domain.question;
 
 public class Range<T extends Number> {
 

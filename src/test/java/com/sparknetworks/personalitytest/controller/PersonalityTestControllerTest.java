@@ -1,8 +1,8 @@
 package com.sparknetworks.personalitytest.controller;
 
-import com.sparknetworks.personalitytest.domain.Question;
-import com.sparknetworks.personalitytest.domain.QuestionType;
-import com.sparknetworks.personalitytest.domain.SingleChoiceQuestion;
+import com.sparknetworks.personalitytest.domain.question.Question;
+import com.sparknetworks.personalitytest.domain.question.QuestionType;
+import com.sparknetworks.personalitytest.domain.question.SingleChoiceQuestion;
 import com.sparknetworks.personalitytest.service.PersonalityTestService;
 import org.junit.Before;
 import org.junit.Test;

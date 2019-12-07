@@ -1,4 +1,4 @@
-package com.sparknetworks.personalitytest.domain;
+package com.sparknetworks.personalitytest.domain.question;
 
 import java.util.List;
 
