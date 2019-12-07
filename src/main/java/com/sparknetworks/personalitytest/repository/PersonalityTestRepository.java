@@ -1,4 +1,6 @@
-package com.sparknetworks.personalitytest.domain;
+package com.sparknetworks.personalitytest.repository;
+
+import com.sparknetworks.personalitytest.domain.Question;
 
 import java.util.List;
 

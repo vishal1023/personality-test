@@ -1,7 +1,10 @@
 package com.sparknetworks.personalitytest.controller;
 
 import com.sparknetworks.personalitytest.domain.Question;
+import com.sparknetworks.personalitytest.domain.QuestionType;
+import com.sparknetworks.personalitytest.domain.SingleChoiceQuestion;
 import com.sparknetworks.personalitytest.service.PersonalityTestService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +30,25 @@ public class PersonalityTestControllerTest {
 
     @MockBean
     private PersonalityTestService personalityTestService;
+    private QuestionType singleChoice;
 
+    @Before
+    public void setUp() {
+        singleChoice = new SingleChoiceQuestion(asList("yes", "sometimes", "no"));
+    }
     @Test
     public void shouldGetListOfQuestion() throws Exception {
         when(this.personalityTestService.getAllQuestions()).thenReturn(asList(
-                new Question("What is your gender?", "hard_fact"),
-                new Question("How often do your drink alcohol?", "lifestyle")
+                new Question("How should your potential partner respond to this question?", "hard_fact", singleChoice),
+                new Question("Do any children under the age of 18 live with you?", "lifestyle", singleChoice)
         ));
 
         mockMvc.perform(get("/personality-test/questions"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].questionText").value("What is your gender?"))
+                .andExpect(jsonPath("$[0].questionText").value("How should your potential partner respond to this question?"))
                 .andExpect(jsonPath("$[0].category").value("hard_fact"))
-                .andExpect(jsonPath("$[1].questionText").value("How often do your drink alcohol?"))
+                .andExpect(jsonPath("$[1].questionText").value("Do any children under the age of 18 live with you?"))
                 .andExpect(jsonPath("$[1].category").value("lifestyle"));
     }
 
@@ -56,8 +64,8 @@ public class PersonalityTestControllerTest {
     @Test
     public void shouldGetListOfQuestionsForGivenCategory() throws Exception {
         when(this.personalityTestService.getQuestionsFor("lifestyle")).thenReturn(asList(
-                new Question("How often do you smoke?", "lifestyle"),
-                new Question("What is your attitude towards drugs?", "lifestyle")
+                new Question("How often do you smoke?", "lifestyle", singleChoice),
+                new Question("What is your attitude towards drugs?", "lifestyle", singleChoice)
         ));
 
         this.mockMvc.perform(get("/personality-test/questions/categories/lifestyle"))
