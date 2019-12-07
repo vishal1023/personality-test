@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.sparknetworks</groupId>
 	<artifactId>personality-test</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>personality-test</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -28,12 +28,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.junit.vintage</groupId>
-					<artifactId>junit-vintage-engine</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 	</dependencies>
 

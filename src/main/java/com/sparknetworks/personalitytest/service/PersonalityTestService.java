@@ -1,0 +1,21 @@
+package com.sparknetworks.personalitytest.service;
+
+import com.sparknetworks.personalitytest.domain.PersonalityTestRepository;
+import com.sparknetworks.personalitytest.domain.Question;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class PersonalityTestService {
+
+    private PersonalityTestRepository personalityTestRepository;
+
+    PersonalityTestService(PersonalityTestRepository personalityTestRepository) {
+        this.personalityTestRepository = personalityTestRepository;
+    }
+
+    public List<Question> getAllQuestions() {
+        return personalityTestRepository.getAllQuestions();
+    }
+}
