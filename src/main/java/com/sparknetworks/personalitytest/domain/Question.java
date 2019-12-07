@@ -3,12 +3,12 @@ package com.sparknetworks.personalitytest.domain;
 public class Question {
 
     private String questionText;
-    private Category category;
+    private String category;
 
     private Question() {
     }
 
-    public Question(String questionText, Category category) {
+    public Question(String questionText, String category) {
         this.questionText = questionText;
         this.category = category;
     }
@@ -17,7 +17,7 @@ public class Question {
         return questionText;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 }

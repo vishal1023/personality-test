@@ -18,4 +18,8 @@ public class PersonalityTestService {
     public List<Question> getAllQuestions() {
         return personalityTestRepository.getAllQuestions();
     }
+
+    public List<Question> getQuestionsFor(String category) {
+        return personalityTestRepository.getQuestionsFor(category);
+    }
 }

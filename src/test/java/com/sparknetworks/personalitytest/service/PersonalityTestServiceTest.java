@@ -8,11 +8,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static com.sparknetworks.personalitytest.domain.Category.HARD_FACT;
-import static com.sparknetworks.personalitytest.domain.Category.LIFESTYLE;
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
@@ -32,13 +30,27 @@ public class PersonalityTestServiceTest {
 
     @Test
     public void shouldReturnListOfQuestions() {
-        when(personalityTestRepository.getAllQuestions()).thenReturn(Arrays.asList(
-                new Question("What is your gender?", HARD_FACT),
-                new Question("How often do your drink alcohol?", LIFESTYLE)
+        when(personalityTestRepository.getAllQuestions()).thenReturn(asList(
+                new Question("What is your gender?", "hard_fact"),
+                new Question("How often do your drink alcohol?", "lifestyle")
         ));
 
         List<Question> questions = personalityTestService.getAllQuestions();
 
         assertThat(questions.size(), is(2));
+    }
+
+    @Test
+    public void shouldReturnListOfQuestionForGivenCategory() {
+        String category = "introversion";
+        when(personalityTestRepository.getQuestionsFor(category)).thenReturn(asList(
+                new Question("I consciously take \"me time\"", "introversion"),
+                new Question("Do you enjoy going on holiday by yourself?", "introversion")
+        ));
+
+        List<Question> questions = personalityTestService.getQuestionsFor("introversion");
+
+        assertThat(questions.get(0).getCategory(), is("introversion"));
+        assertThat(questions.get(1).getCategory(), is("introversion"));
     }
 }

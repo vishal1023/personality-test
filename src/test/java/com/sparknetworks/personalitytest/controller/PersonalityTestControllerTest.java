@@ -10,8 +10,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.sparknetworks.personalitytest.domain.Category.HARD_FACT;
-import static com.sparknetworks.personalitytest.domain.Category.LIFESTYLE;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
@@ -32,16 +30,28 @@ public class PersonalityTestControllerTest {
     @Test
     public void shouldGetListOfQuestion() throws Exception {
         when(this.personalityTestService.getAllQuestions()).thenReturn(asList(
-                new Question("What is your gender?", HARD_FACT),
-                new Question("How often do your drink alcohol?", LIFESTYLE)
+                new Question("What is your gender?", "hard_fact"),
+                new Question("How often do your drink alcohol?", "lifestyle")
         ));
 
         mockMvc.perform(get("/personality-test/questions"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].questionText").value("What is your gender?"))
-                .andExpect(jsonPath("$[0].category").value("HARD_FACT"))
+                .andExpect(jsonPath("$[0].category").value("hard_fact"))
                 .andExpect(jsonPath("$[1].questionText").value("How often do your drink alcohol?"))
-                .andExpect(jsonPath("$[1].category").value("LIFESTYLE"));
+                .andExpect(jsonPath("$[1].category").value("lifestyle"));
+    }
+
+    @Test
+    public void shouldGetListOfQuestionsForGivenCategory() throws Exception {
+        when(this.personalityTestService.getQuestionsFor("lifestyle")).thenReturn(asList(
+                new Question("How often do you smoke?", "lifestyle"),
+                new Question("What is your attitude towards drugs?", "lifestyle")
+        ));
+
+        this.mockMvc.perform(get("/personality-test/questions/categories/lifestyle"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].category").value("lifestyle"));
     }
 }
