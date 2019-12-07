@@ -1,6 +1,7 @@
 package com.sparknetworks.personalitytest.controller;
 
 import com.sparknetworks.personalitytest.domain.Question;
+import com.sparknetworks.personalitytest.exception.CategoryNotFoundException;
 import com.sparknetworks.personalitytest.service.PersonalityTestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,10 @@ public class PersonalityTestController {
 
     @GetMapping("/personality-test/questions/categories/{category}")
     public List<Question> getQuestionsFor(@PathVariable(value = "category") String category) {
-        return personalityTestService.getQuestionsFor(category);
+        List<Question> questions = personalityTestService.getQuestionsFor(category);
+        if (questions == null || questions.size() == 0) {
+            throw new CategoryNotFoundException();
+        }
+        return questions;
     }
 }

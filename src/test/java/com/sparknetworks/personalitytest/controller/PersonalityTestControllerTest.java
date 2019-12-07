@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -44,6 +45,15 @@ public class PersonalityTestControllerTest {
     }
 
     @Test
+    public void shouldGetEmptyListOfQuestionIfNoQuestionsFound() throws Exception {
+        when(this.personalityTestService.getAllQuestions()).thenReturn(emptyList());
+
+        mockMvc.perform(get("/personality-test/questions"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
     public void shouldGetListOfQuestionsForGivenCategory() throws Exception {
         when(this.personalityTestService.getQuestionsFor("lifestyle")).thenReturn(asList(
                 new Question("How often do you smoke?", "lifestyle"),
@@ -53,5 +63,13 @@ public class PersonalityTestControllerTest {
         this.mockMvc.perform(get("/personality-test/questions/categories/lifestyle"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].category").value("lifestyle"));
+    }
+
+    @Test
+    public void shouldReturnCategoryNotFound() throws Exception {
+        when(this.personalityTestService.getQuestionsFor("unknown-category")).thenReturn(emptyList());
+
+        this.mockMvc.perform(get("/personality-test/questions/categories/unknown-category"))
+                .andExpect(status().isNotFound());
     }
 }
