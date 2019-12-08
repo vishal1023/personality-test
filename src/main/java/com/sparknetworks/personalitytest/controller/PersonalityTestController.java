@@ -1,14 +1,16 @@
 package com.sparknetworks.personalitytest.controller;
 
+import com.sparknetworks.personalitytest.domain.answer.TestAnswers;
 import com.sparknetworks.personalitytest.domain.question.Question;
 import com.sparknetworks.personalitytest.exception.CategoryNotFoundException;
 import com.sparknetworks.personalitytest.service.PersonalityTestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 public class PersonalityTestController {
@@ -28,5 +30,11 @@ public class PersonalityTestController {
             throw new CategoryNotFoundException();
         }
         return questions;
+    }
+
+    @PostMapping("/personality-test/answers")
+    public ResponseEntity<?> saveAnswer(@RequestBody TestAnswers personalityTestAnswers) {
+        personalityTestService.saveTestAnswers(personalityTestAnswers);
+        return new ResponseEntity<>(CREATED);
     }
 }

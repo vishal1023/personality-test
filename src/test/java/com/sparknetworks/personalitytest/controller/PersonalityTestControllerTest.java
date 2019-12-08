@@ -1,5 +1,7 @@
 package com.sparknetworks.personalitytest.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparknetworks.personalitytest.domain.answer.*;
 import com.sparknetworks.personalitytest.domain.question.Question;
 import com.sparknetworks.personalitytest.domain.question.QuestionType;
 import com.sparknetworks.personalitytest.domain.question.SingleChoiceQuestion;
@@ -10,14 +12,24 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,6 +48,7 @@ public class PersonalityTestControllerTest {
     public void setUp() {
         singleChoice = new SingleChoiceQuestion(asList("yes", "sometimes", "no"));
     }
+
     @Test
     public void shouldGetListOfQuestion() throws Exception {
         when(this.personalityTestService.getAllQuestions()).thenReturn(asList(
@@ -79,5 +92,32 @@ public class PersonalityTestControllerTest {
 
         this.mockMvc.perform(get("/personality-test/questions/categories/unknown-category"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldSaveAllAnswersOfTest() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        doNothing().when(personalityTestService).saveTestAnswers(any());
+        TestAnswers personalityTestAnswers = new PersonalityTestAnswers("test1", "100", getAnswers());
+
+        this.mockMvc.perform(post("/personality-test/answers/")
+                .content(objectMapper.writeValueAsString(personalityTestAnswers))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+    private List<Answer> getAnswers() {
+        AnswerType singleChoiceAnswer = new SingleChoiceAnswer("SingleChoice", "Yes");
+        AnswerType singleChoiceConditional = new SingleChoiceConditionalAnswer(
+                "single_choice_conditional", "Yes", true, singleChoiceAnswer);
+        AnswerType numberRangeAnswer = new NumberRangeAnswer("number_range", 25);
+
+        Answer answer1 = new Answer("a1", singleChoiceAnswer);
+        Answer answer2 = new Answer("b1", singleChoiceAnswer);
+        Answer answer3 = new Answer("c1", singleChoiceConditional);
+        Answer answer4 = new Answer("d1", numberRangeAnswer);
+
+        return Arrays.asList(answer1, answer2, answer3, answer4);
     }
 }

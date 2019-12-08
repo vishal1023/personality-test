@@ -1,5 +1,6 @@
 package com.sparknetworks.personalitytest.service;
 
+import com.sparknetworks.personalitytest.domain.answer.*;
 import com.sparknetworks.personalitytest.domain.question.*;
 import com.sparknetworks.personalitytest.repository.PersonalityTestRepository;
 import org.junit.Before;
@@ -12,10 +13,12 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PersonalityTestServiceTest {
@@ -92,5 +95,18 @@ public class PersonalityTestServiceTest {
         assertNotNull(singleChoiceConditionalQuestion.getOptions());
         assertNotNull(singleChoiceConditionalQuestion.getCondition());
         assertNotNull(singleChoiceConditionalQuestion.getConditionalQuestion());
+    }
+
+    @Test
+    public void shouldSaveTestAnswer() {
+        doNothing().when(personalityTestRepository).saveTestAnswer(any(TestAnswers.class));
+
+        AnswerType answer = new SingleChoiceAnswer("SingleChoice", "Yes");
+        TestAnswers personalityTestAnswers = new PersonalityTestAnswers("test1", "100",
+                singletonList(new Answer("a1", answer)));
+
+        personalityTestService.saveTestAnswers(personalityTestAnswers);
+
+        verify(personalityTestRepository, times(1)).saveTestAnswer(personalityTestAnswers);
     }
 }
