@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonalityTestService {
@@ -20,8 +22,8 @@ public class PersonalityTestService {
     }
 
     public PersonalityTestQuestions getAllQuestions() {
-        List<String> categories = personalityTestRepository.getCategories();
         List<Question> questions = personalityTestRepository.getAllQuestions();
+        Set<String> categories = questions.stream().map(Question::getCategory).collect(Collectors.toSet());
         return new PersonalityTestQuestions(categories, questions);
     }
 

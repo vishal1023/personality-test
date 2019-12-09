@@ -41,7 +41,6 @@ public class PersonalityTestServiceTest {
                 new Question("100", "Do any children under the age of 18 live with you?", "hard_fact", singleChoice),
                 new Question("101", "How should your potential partner respond to this question?", "lifestyle", singleChoice)
         ));
-        when(personalityTestRepository.getCategories()).thenReturn(asList("hard_fact", "lifestyle"));
 
         PersonalityTestQuestions personalityTestQuestions = personalityTestService.getAllQuestions();
 

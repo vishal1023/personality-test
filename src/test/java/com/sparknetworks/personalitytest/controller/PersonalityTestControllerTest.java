@@ -20,10 +20,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
@@ -57,7 +60,7 @@ public class PersonalityTestControllerTest {
                 new Question("questionId", "How should your potential partner respond to this question?", "hard_fact", singleChoice),
                 new Question("questionId", "Do any children under the age of 18 live with you?", "lifestyle", singleChoice)
         );
-        List<String> categories = asList("hard_fact", "lifestyle");
+        Set<String> categories = new HashSet<>(asList("hard_fact", "lifestyle"));
         PersonalityTestQuestions personalityTestQuestions = new PersonalityTestQuestions(categories, questions);
         when(this.personalityTestService.getAllQuestions()).thenReturn(personalityTestQuestions);
 
@@ -79,7 +82,7 @@ public class PersonalityTestControllerTest {
     @Test
     public void shouldGetEmptyListOfQuestionIfNoQuestionsFound() throws Exception {
         when(this.personalityTestService.getAllQuestions())
-                .thenReturn(new PersonalityTestQuestions(emptyList(), emptyList()));
+                .thenReturn(new PersonalityTestQuestions(emptySet(), emptyList()));
 
         mockMvc.perform(get("/personality-test/questions"))
                 .andExpect(status().isOk())

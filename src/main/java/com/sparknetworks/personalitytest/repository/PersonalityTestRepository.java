@@ -15,5 +15,4 @@ public interface PersonalityTestRepository {
 
     void saveTestAnswer(TestAnswers testAnswers);
 
-    List<String> getCategories();
 }

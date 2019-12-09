@@ -29,12 +29,6 @@ public class PersonalityTestMongoDBRepository implements PersonalityTestReposito
         return questionRepository.findAll();
     }
 
-
-    @Override
-    public List<String> getCategories() {
-        return null;
-    }
-
     @Override
     public List<Question> getQuestionsFor(String category) {
         List<Question> allQuestions = questionRepository.findAll();
