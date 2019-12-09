@@ -41,10 +41,12 @@ public class PersonalityTestServiceTest {
                 new Question("100", "Do any children under the age of 18 live with you?", "hard_fact", singleChoice),
                 new Question("101", "How should your potential partner respond to this question?", "lifestyle", singleChoice)
         ));
+        when(personalityTestRepository.getCategories()).thenReturn(asList("hard_fact", "lifestyle"));
 
-        List<Question> questions = personalityTestService.getAllQuestions();
+        PersonalityTestQuestions personalityTestQuestions = personalityTestService.getAllQuestions();
 
-        assertThat(questions.size(), is(2));
+        assertNotNull(personalityTestQuestions);
+        assertThat(personalityTestQuestions.getQuestions().size(), is(2));
     }
 
     @Test
@@ -74,16 +76,17 @@ public class PersonalityTestServiceTest {
         QuestionType rangeType = new NumberRangeQuestion(new Range<>(18, 40));
         Condition condition = new ExactEqualCondition();
         List<String> initialOptions = asList("yes", "sometimes", "no");
-        Question conditionalQuestion = new Question("100","What age should your potential partner be?", INTROVERSION_CATEGORY, rangeType);
+        Question conditionalQuestion = new Question("100", "What age should your potential partner be?", INTROVERSION_CATEGORY, rangeType);
         QuestionType singleChoiceConditional = new SingleChoiceConditionalQuestion(initialOptions, condition, conditionalQuestion);
 
         when(personalityTestRepository.getAllQuestions()).thenReturn(asList(
-                new Question("100","How should your potential partner respond to this question?", INTROVERSION_CATEGORY, singleChoice),
-                new Question("101","What age should your potential partner be?", INTROVERSION_CATEGORY, rangeType),
-                new Question("102","What age should your potential partner be?", INTROVERSION_CATEGORY, singleChoiceConditional)
+                new Question("100", "How should your potential partner respond to this question?", INTROVERSION_CATEGORY, singleChoice),
+                new Question("101", "What age should your potential partner be?", INTROVERSION_CATEGORY, rangeType),
+                new Question("102", "What age should your potential partner be?", INTROVERSION_CATEGORY, singleChoiceConditional)
         ));
 
-        List<Question> questions = personalityTestService.getAllQuestions();
+        PersonalityTestQuestions personalityTestServiceAllQuestions = personalityTestService.getAllQuestions();
+        List<Question> questions = personalityTestServiceAllQuestions.getQuestions();
 
         SingleChoiceQuestion singleChoiceQuestion = (SingleChoiceQuestion) questions.get(0).getQuestionType();
         NumberRangeQuestion numberRangeQuestion = (NumberRangeQuestion) questions.get(1).getQuestionType();

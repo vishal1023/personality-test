@@ -2,6 +2,7 @@ package com.sparknetworks.personalitytest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparknetworks.personalitytest.domain.answer.*;
+import com.sparknetworks.personalitytest.domain.question.PersonalityTestQuestions;
 import com.sparknetworks.personalitytest.domain.question.Question;
 import com.sparknetworks.personalitytest.domain.question.QuestionType;
 import com.sparknetworks.personalitytest.domain.question.SingleChoiceQuestion;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -51,35 +53,46 @@ public class PersonalityTestControllerTest {
 
     @Test
     public void shouldGetListOfQuestion() throws Exception {
-        when(this.personalityTestService.getAllQuestions()).thenReturn(asList(
+        List<Question> questions = asList(
                 new Question("questionId", "How should your potential partner respond to this question?", "hard_fact", singleChoice),
                 new Question("questionId", "Do any children under the age of 18 live with you?", "lifestyle", singleChoice)
-        ));
+        );
+        List<String> categories = asList("hard_fact", "lifestyle");
+        PersonalityTestQuestions personalityTestQuestions = new PersonalityTestQuestions(categories, questions);
+        when(this.personalityTestService.getAllQuestions()).thenReturn(personalityTestQuestions);
 
         mockMvc.perform(get("/personality-test/questions"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].questionText").value("How should your potential partner respond to this question?"))
-                .andExpect(jsonPath("$[0].category").value("hard_fact"))
-                .andExpect(jsonPath("$[1].questionText").value("Do any children under the age of 18 live with you?"))
-                .andExpect(jsonPath("$[1].category").value("lifestyle"));
+                .andDo(print())
+                .andExpect(jsonPath("$.categories", hasSize(2)))
+                .andExpect(jsonPath("$.questions", hasSize(2)))
+                .andExpect(jsonPath("$.categories", hasItem("hard_fact")))
+                .andExpect(jsonPath("$.categories", hasItem("lifestyle")))
+                .andExpect(jsonPath("$.questions[0].questionText")
+                        .value("How should your potential partner respond to this question?"))
+                .andExpect(jsonPath("$.questions[0]category").value("hard_fact"))
+                .andExpect(jsonPath("$.questions[1].questionText")
+                        .value("Do any children under the age of 18 live with you?"))
+                .andExpect(jsonPath("$.questions[1]category").value("lifestyle"));
     }
 
     @Test
     public void shouldGetEmptyListOfQuestionIfNoQuestionsFound() throws Exception {
-        when(this.personalityTestService.getAllQuestions()).thenReturn(emptyList());
+        when(this.personalityTestService.getAllQuestions())
+                .thenReturn(new PersonalityTestQuestions(emptyList(), emptyList()));
 
         mockMvc.perform(get("/personality-test/questions"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(jsonPath("$.questions", hasSize(0)));
     }
 
     @Test
     public void shouldGetListOfQuestionsForGivenCategory() throws Exception {
-        when(this.personalityTestService.getQuestionsFor("lifestyle")).thenReturn(asList(
+        List<Question> questions = asList(
                 new Question("questionId", "How often do you smoke?", "lifestyle", singleChoice),
                 new Question("questionId", "What is your attitude towards drugs?", "lifestyle", singleChoice)
-        ));
+        );
+        when(this.personalityTestService.getQuestionsFor("lifestyle")).thenReturn(questions);
 
         this.mockMvc.perform(get("/personality-test/questions/categories/lifestyle"))
                 .andExpect(status().isOk())

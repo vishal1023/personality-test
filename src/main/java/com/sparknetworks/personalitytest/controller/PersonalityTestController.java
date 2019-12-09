@@ -1,6 +1,7 @@
 package com.sparknetworks.personalitytest.controller;
 
 import com.sparknetworks.personalitytest.domain.answer.TestAnswers;
+import com.sparknetworks.personalitytest.domain.question.PersonalityTestQuestions;
 import com.sparknetworks.personalitytest.domain.question.Question;
 import com.sparknetworks.personalitytest.exception.CategoryNotFoundException;
 import com.sparknetworks.personalitytest.service.PersonalityTestService;
@@ -19,7 +20,7 @@ public class PersonalityTestController {
     private PersonalityTestService personalityTestService;
 
     @GetMapping("/personality-test/questions")
-    public List<Question> getAllQuestions() {
+    public PersonalityTestQuestions getAllQuestions() {
         return personalityTestService.getAllQuestions();
     }
 

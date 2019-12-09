@@ -1,6 +1,7 @@
 package com.sparknetworks.personalitytest.service;
 
 import com.sparknetworks.personalitytest.domain.answer.TestAnswers;
+import com.sparknetworks.personalitytest.domain.question.PersonalityTestQuestions;
 import com.sparknetworks.personalitytest.domain.question.Question;
 import com.sparknetworks.personalitytest.repository.PersonalityTestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,10 @@ public class PersonalityTestService {
         this.personalityTestRepository = personalityTestRepository;
     }
 
-    public List<Question> getAllQuestions() {
-        return personalityTestRepository.getAllQuestions();
+    public PersonalityTestQuestions getAllQuestions() {
+        List<String> categories = personalityTestRepository.getCategories();
+        List<Question> questions = personalityTestRepository.getAllQuestions();
+        return new PersonalityTestQuestions(categories, questions);
     }
 
     public List<Question> getQuestionsFor(String category) {
