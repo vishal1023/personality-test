@@ -6,6 +6,7 @@ import com.sparknetworks.personalitytest.domain.question.PersonalityTestQuestion
 import com.sparknetworks.personalitytest.domain.question.Question;
 import com.sparknetworks.personalitytest.domain.question.QuestionType;
 import com.sparknetworks.personalitytest.domain.question.SingleChoiceQuestion;
+import com.sparknetworks.personalitytest.repository.mongodb.PersonalityTestKey;
 import com.sparknetworks.personalitytest.service.PersonalityTestService;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,8 +58,8 @@ public class PersonalityTestControllerTest {
     @Test
     public void shouldGetListOfQuestion() throws Exception {
         List<Question> questions = asList(
-                new Question("questionId", "How should your potential partner respond to this question?", "hard_fact", singleChoice),
-                new Question("questionId", "Do any children under the age of 18 live with you?", "lifestyle", singleChoice)
+                new Question("How should your potential partner respond to this question?", "hard_fact", singleChoice),
+                new Question("Do any children under the age of 18 live with you?", "lifestyle", singleChoice)
         );
         Set<String> categories = new HashSet<>(asList("hard_fact", "lifestyle"));
         PersonalityTestQuestions personalityTestQuestions = new PersonalityTestQuestions(categories, questions);
@@ -92,8 +93,8 @@ public class PersonalityTestControllerTest {
     @Test
     public void shouldGetListOfQuestionsForGivenCategory() throws Exception {
         List<Question> questions = asList(
-                new Question("questionId", "How often do you smoke?", "lifestyle", singleChoice),
-                new Question("questionId", "What is your attitude towards drugs?", "lifestyle", singleChoice)
+                new Question("How often do you smoke?", "lifestyle", singleChoice),
+                new Question("What is your attitude towards drugs?", "lifestyle", singleChoice)
         );
         when(this.personalityTestService.getQuestionsFor("lifestyle")).thenReturn(questions);
 
@@ -114,7 +115,7 @@ public class PersonalityTestControllerTest {
     public void shouldSaveAllAnswersOfTest() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         doNothing().when(personalityTestService).saveTestAnswers(any());
-        TestAnswers personalityTestAnswers = new PersonalityTestAnswers("test1", "100", getAnswers());
+        TestAnswers personalityTestAnswers = new PersonalityTestAnswers(new PersonalityTestKey("test1", "100"), getAnswers());
 
         this.mockMvc.perform(post("/personality-test/answers/")
                 .content(objectMapper.writeValueAsString(personalityTestAnswers))

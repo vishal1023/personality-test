@@ -1,10 +1,13 @@
 package com.sparknetworks.personalitytest.domain.answer;
 
+import org.springframework.data.annotation.Id;
+
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Answer {
 
     private final static AtomicLong counter = new AtomicLong(0);
+    @Id
     private long id;
     private String questionId;
     private AnswerType answerType;

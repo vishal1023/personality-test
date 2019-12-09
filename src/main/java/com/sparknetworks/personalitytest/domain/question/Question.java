@@ -3,7 +3,7 @@ package com.sparknetworks.personalitytest.domain.question;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection = "questions")
 public class Question {
 
     @Id
@@ -15,8 +15,7 @@ public class Question {
     private Question() {
     }
 
-    public Question(String id, String questionText, String category, QuestionType questionType) {
-        this.id = id;
+    public Question(String questionText, String category, QuestionType questionType) {
         this.questionText = questionText;
         this.category = category;
         this.questionType = questionType;
@@ -32,5 +31,9 @@ public class Question {
 
     public QuestionType getQuestionType() {
         return questionType;
+    }
+
+    public String getId() {
+        return id;
     }
 }
