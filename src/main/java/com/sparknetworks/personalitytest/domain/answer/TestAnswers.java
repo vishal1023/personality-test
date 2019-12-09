@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         use = JsonTypeInfo.Id.NAME,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = PersonalityTestAnswers.class, name = "personalityTestAnswers"),
+        @JsonSubTypes.Type(value = PersonalityTestAnswers.class),
 })
 public interface TestAnswers {
 }

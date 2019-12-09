@@ -52,8 +52,8 @@ public class PersonalityTestControllerTest {
     @Test
     public void shouldGetListOfQuestion() throws Exception {
         when(this.personalityTestService.getAllQuestions()).thenReturn(asList(
-                new Question("How should your potential partner respond to this question?", "hard_fact", singleChoice),
-                new Question("Do any children under the age of 18 live with you?", "lifestyle", singleChoice)
+                new Question("questionId", "How should your potential partner respond to this question?", "hard_fact", singleChoice),
+                new Question("questionId", "Do any children under the age of 18 live with you?", "lifestyle", singleChoice)
         ));
 
         mockMvc.perform(get("/personality-test/questions"))
@@ -77,8 +77,8 @@ public class PersonalityTestControllerTest {
     @Test
     public void shouldGetListOfQuestionsForGivenCategory() throws Exception {
         when(this.personalityTestService.getQuestionsFor("lifestyle")).thenReturn(asList(
-                new Question("How often do you smoke?", "lifestyle", singleChoice),
-                new Question("What is your attitude towards drugs?", "lifestyle", singleChoice)
+                new Question("questionId", "How often do you smoke?", "lifestyle", singleChoice),
+                new Question("questionId", "What is your attitude towards drugs?", "lifestyle", singleChoice)
         ));
 
         this.mockMvc.perform(get("/personality-test/questions/categories/lifestyle"))

@@ -17,7 +17,6 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -39,8 +38,8 @@ public class PersonalityTestServiceTest {
     @Test
     public void shouldReturnListOfQuestions() {
         when(personalityTestRepository.getAllQuestions()).thenReturn(asList(
-                new Question("Do any children under the age of 18 live with you?", "hard_fact", singleChoice),
-                new Question("How should your potential partner respond to this question?", "lifestyle", singleChoice)
+                new Question("100", "Do any children under the age of 18 live with you?", "hard_fact", singleChoice),
+                new Question("101", "How should your potential partner respond to this question?", "lifestyle", singleChoice)
         ));
 
         List<Question> questions = personalityTestService.getAllQuestions();
@@ -51,8 +50,8 @@ public class PersonalityTestServiceTest {
     @Test
     public void shouldReturnListOfQuestionForGivenCategory() {
         when(personalityTestRepository.getQuestionsFor(INTROVERSION_CATEGORY)).thenReturn(asList(
-                new Question("Do any children under the age of 18 live with you?", INTROVERSION_CATEGORY, singleChoice),
-                new Question("Do you enjoy going on holiday by yourself?", INTROVERSION_CATEGORY, singleChoice)
+                new Question("100", "Do any children under the age of 18 live with you?", INTROVERSION_CATEGORY, singleChoice),
+                new Question("101", "Do you enjoy going on holiday by yourself?", INTROVERSION_CATEGORY, singleChoice)
         ));
 
         List<Question> questions = personalityTestService.getQuestionsFor(INTROVERSION_CATEGORY);
@@ -75,13 +74,13 @@ public class PersonalityTestServiceTest {
         QuestionType rangeType = new NumberRangeQuestion(new Range<>(18, 40));
         Condition condition = new ExactEqualCondition();
         List<String> initialOptions = asList("yes", "sometimes", "no");
-        Question conditionalQuestion = new Question("What age should your potential partner be?", INTROVERSION_CATEGORY, rangeType);
+        Question conditionalQuestion = new Question("100","What age should your potential partner be?", INTROVERSION_CATEGORY, rangeType);
         QuestionType singleChoiceConditional = new SingleChoiceConditionalQuestion(initialOptions, condition, conditionalQuestion);
 
         when(personalityTestRepository.getAllQuestions()).thenReturn(asList(
-                new Question("How should your potential partner respond to this question?", INTROVERSION_CATEGORY, singleChoice),
-                new Question("What age should your potential partner be?", INTROVERSION_CATEGORY, rangeType),
-                new Question("What age should your potential partner be?", INTROVERSION_CATEGORY, singleChoiceConditional)
+                new Question("100","How should your potential partner respond to this question?", INTROVERSION_CATEGORY, singleChoice),
+                new Question("101","What age should your potential partner be?", INTROVERSION_CATEGORY, rangeType),
+                new Question("102","What age should your potential partner be?", INTROVERSION_CATEGORY, singleChoiceConditional)
         ));
 
         List<Question> questions = personalityTestService.getAllQuestions();
@@ -99,8 +98,6 @@ public class PersonalityTestServiceTest {
 
     @Test
     public void shouldSaveTestAnswer() {
-        doNothing().when(personalityTestRepository).saveTestAnswer(any(TestAnswers.class));
-
         AnswerType answer = new SingleChoiceAnswer("SingleChoice", "Yes");
         TestAnswers personalityTestAnswers = new PersonalityTestAnswers("test1", "100",
                 singletonList(new Answer("a1", answer)));
