@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         use = JsonTypeInfo.Id.NAME,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = SingleChoiceQuestion.class),
-        @JsonSubTypes.Type(value = SingleChoiceConditionalQuestion.class),
-        @JsonSubTypes.Type(value = NumberRangeQuestion.class),
+        @JsonSubTypes.Type(value = SingleChoiceQuestion.class, name = "single_choice"),
+        @JsonSubTypes.Type(value = SingleChoiceConditionalQuestion.class, name = "single_choice_conditional"),
+        @JsonSubTypes.Type(value = NumberRangeQuestion.class, name = "number_range"),
 })
 public interface QuestionType {
 }

@@ -1,7 +1,10 @@
 package com.sparknetworks.personalitytest.domain.question;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Objects;
 
 @Document(collection = "questions")
 public class Question {
@@ -10,6 +13,7 @@ public class Question {
     private String id;
     private String questionText;
     private String category;
+    @JsonProperty("question_type")
     private QuestionType questionType;
 
     private Question() {
@@ -35,5 +39,31 @@ public class Question {
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Question)) return false;
+        Question question = (Question) o;
+        return Objects.equals(id, question.id) &&
+                Objects.equals(questionText, question.questionText) &&
+                Objects.equals(category, question.category) &&
+                Objects.equals(questionType, question.questionType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, questionText, category, questionType);
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id='" + id + '\'' +
+                ", questionText='" + questionText + '\'' +
+                ", category='" + category + '\'' +
+                ", questionType=" + questionType +
+                '}';
     }
 }
