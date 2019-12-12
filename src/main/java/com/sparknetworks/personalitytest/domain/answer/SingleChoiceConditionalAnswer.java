@@ -2,7 +2,7 @@ package com.sparknetworks.personalitytest.domain.answer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-@JsonDeserialize
+@JsonDeserialize(as = SingleChoiceConditionalAnswer.class)
 public class SingleChoiceConditionalAnswer extends SingleChoiceAnswer {
 
     private boolean isConditionSuccessful;

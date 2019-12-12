@@ -15,4 +15,5 @@ public interface PersonalityTestRepository {
 
     void saveTestAnswer(TestAnswers testAnswers);
 
+    List<TestAnswers> getAllAns();
 }

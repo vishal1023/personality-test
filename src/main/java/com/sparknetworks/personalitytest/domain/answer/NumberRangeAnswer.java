@@ -2,7 +2,7 @@ package com.sparknetworks.personalitytest.domain.answer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-@JsonDeserialize
+@JsonDeserialize(as = NumberRangeAnswer.class)
 public class NumberRangeAnswer implements AnswerType {
 
     private String type;

@@ -1,7 +1,6 @@
 package com.sparknetworks.personalitytest.repository.mongodb;
 
 import com.sparknetworks.personalitytest.domain.answer.TestAnswers;
-import com.sparknetworks.personalitytest.domain.question.PersonalityTestQuestions;
 import com.sparknetworks.personalitytest.domain.question.Question;
 import com.sparknetworks.personalitytest.repository.PersonalityTestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,4 +42,9 @@ public class PersonalityTestMongoDBRepository implements PersonalityTestReposito
         answerRepository.insert(testAnswers);
     }
 
+    @Override
+    public List<TestAnswers> getAllAns() {
+        return answerRepository.findAll();
+
+    }
 }

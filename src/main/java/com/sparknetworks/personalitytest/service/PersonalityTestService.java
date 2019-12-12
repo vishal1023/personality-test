@@ -34,4 +34,8 @@ public class PersonalityTestService {
     public void saveTestAnswers(TestAnswers answers) {
         personalityTestRepository.saveTestAnswer(answers);
     }
+
+    public List<TestAnswers> getAllAns() {
+        return personalityTestRepository.getAllAns();
+    }
 }
