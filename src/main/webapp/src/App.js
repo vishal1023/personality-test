@@ -1,26 +1,73 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import SingleChoiceQuestion from './SingleChoiceQuestion'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+
+ constructor(props) {
+    super(props);
+
+    this.state = {
+      questions: [],
+      answers: [],
+      displayQuestions: false
+    }
+ }
+
+   componentDidMount(){
+        this.getQuestions();
+    }
+
+   getQuestions(){
+    fetch("/personality-test/questions")
+          .then(res => res.json())
+          .then(res => this.setState({questions: res}));
+
+    console.log("Loaded successfully")
+   }
+
+    displayQuestion = (event) => {
+         event.preventDefault();
+        this.setState({
+            displayQuestions: true
+        })
+    }
+
+    render() {
+       return(
+          <form>
+           <div className="App">
+           <h1>Personality Test</h1>
+            UserId <input type="text" name="userId" />
+            <button className="btn" onClick={ (e) => { this.displayQuestion(e)}}>Take test</button>
+           {
+           this.state.displayQuestions &&
+            <div>
+                 { this.state.questions.questions.map((question, index) => {
+                    switch (question.question_type.type) {
+                        case 'single_choice':
+                                return <SingleChoiceQuestion key={question.questionText}
+                                                      options={question.question_type.options}
+                                                      questionText={question.questionText} />
+                        default: return null;
+                    }
+
+                 })}
+            </div>
+           }
+           </div>
+           <input type="submit" value="Submit" onClick= {(e) => {e.preventDefault()} } />
+           </form>
+       )
+    }
+
 }
-
 export default App;
+
+
+//{
+//      "questionId": "100",
+//      "answer_type": {
+//        "type": "single_choice",
+//        "answer": "male"
+//      }
+//    }
