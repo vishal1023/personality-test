@@ -32,6 +32,11 @@ class App extends Component {
         })
     }
 
+    radioSingleChoiceChangeHandler = (event) => {
+        console.log("Question " + event.target.name)
+        console.log("Selected " + event.target.value)
+    }
+
     render() {
        return(
           <form>
@@ -47,7 +52,8 @@ class App extends Component {
                         case 'single_choice':
                                 return <SingleChoiceQuestion key={question.questionText}
                                                       options={question.question_type.options}
-                                                      questionText={question.questionText} />
+                                                      questionText={question.questionText}
+                                                      changed= {this.radioSingleChoiceChangeHandler} />
                         default: return null;
                     }
 

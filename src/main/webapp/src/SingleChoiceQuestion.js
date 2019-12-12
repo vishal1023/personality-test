@@ -6,7 +6,7 @@ const SingleChoiceQuestion = ( props ) => {
     <p>{props.questionText}</p>
     <div className="radio">
         {props.options.map(function(option, index) {
-            return  <td>{option}<input type="radio" value={option} name={props.questionText} /></td>
+            return  <td>{option}<input type="radio" value={option} name={props.questionText} onChange= {props.changed}/></td>
         })}
     </div>
    </div>
