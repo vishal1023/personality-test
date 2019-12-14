@@ -26,6 +26,7 @@ public class IntegrationTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+
     @Ignore
     @Test
     public void shouldGetListOfQuestionForAllCategories() {
@@ -39,7 +40,7 @@ public class IntegrationTest {
         assertThat(Objects.requireNonNull(questions).length).isGreaterThan(0);
     }
 
-    @Ignore
+
     @Test
     public void shouldSaveTestAnswers() {
         List<Answer> answers = getAnswers();
@@ -53,8 +54,8 @@ public class IntegrationTest {
     private List<Answer> getAnswers() {
         AnswerType singleChoiceAnswer = new SingleChoiceAnswer("SingleChoice", "Yes");
         AnswerType singleChoiceConditional = new SingleChoiceConditionalAnswer(
-                "single_choice_conditional", "Yes", true, singleChoiceAnswer);
-        AnswerType numberRangeAnswer = new NumberRangeAnswer("number_range", 25);
+                "single_choice_conditional", "Yes", singleChoiceAnswer);
+        AnswerType numberRangeAnswer = new NumberRangeAnswer("number_range", 25, 30);
 
         Answer answer1 = new Answer("a1", singleChoiceAnswer);
         Answer answer2 = new Answer("b1", singleChoiceAnswer);
@@ -62,5 +63,16 @@ public class IntegrationTest {
         Answer answer4 = new Answer("d1", numberRangeAnswer);
 
         return Arrays.asList(answer1, answer2, answer3, answer4);
+    }
+
+    @Test
+    public void shouldReturnAllAnswers() {
+        ResponseEntity<TestAnswers[]> responseEntity =
+                this.restTemplate.getForEntity("/personality-test/answers", TestAnswers[].class);
+
+        TestAnswers[] body = responseEntity.getBody();
+        System.out.println("*********************************");
+        System.out.println(Arrays.toString(body));
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }
