@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Question {
 
     @Id
-    private String questionText;
+    private String question;
     private String category;
     @JsonProperty("question_type")
     private QuestionType questionType;
@@ -18,14 +18,14 @@ public class Question {
     private Question() {
     }
 
-    public Question(String questionText, String category, QuestionType questionType) {
-        this.questionText = questionText;
+    public Question(String question, String category, QuestionType questionType) {
+        this.question = question;
         this.category = category;
         this.questionType = questionType;
     }
 
-    public String getQuestionText() {
-        return questionText;
+    public String getQuestion() {
+        return question;
     }
 
     public String getCategory() {
@@ -41,20 +41,20 @@ public class Question {
         if (this == o) return true;
         if (!(o instanceof Question)) return false;
         Question question = (Question) o;
-        return Objects.equals(questionText, question.questionText) &&
+        return Objects.equals(this.question, question.question) &&
                 Objects.equals(category, question.category) &&
                 Objects.equals(questionType, question.questionType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(questionText, category, questionType);
+        return Objects.hash(question, category, questionType);
     }
 
     @Override
     public String toString() {
         return "Question{" +
-                ", questionText='" + questionText + '\'' +
+                ", question='" + question + '\'' +
                 ", category='" + category + '\'' +
                 ", questionType=" + questionType +
                 '}';

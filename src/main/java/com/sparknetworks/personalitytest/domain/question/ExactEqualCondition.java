@@ -1,7 +1,9 @@
 package com.sparknetworks.personalitytest.domain.question;
 
-public class ExactEqualCondition implements Condition {
+public class ExactEqualCondition {
 
-    public ExactEqualCondition(){
+    private Question conditionalQuestion;
+
+    private ExactEqualCondition() {
     }
 }

@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -74,10 +75,11 @@ public class PersonalityTestServiceTest {
     @Test
     public void shouldGetDifferentTypesOfQuestions() {
         QuestionType rangeType = new NumberRangeQuestion(new Range<>(18, 40));
-        Condition condition = new ExactEqualCondition();
         List<String> initialOptions = asList("yes", "sometimes", "no");
         Question conditionalQuestion = new Question("What age should your potential partner be?", INTROVERSION_CATEGORY, rangeType);
-        QuestionType singleChoiceConditional = new SingleChoiceConditionalQuestion(initialOptions, condition, conditionalQuestion);
+        Condition condition =
+                new Condition(new Predicate(Arrays.asList("${selection}", "very important")), conditionalQuestion);
+        QuestionType singleChoiceConditional = new SingleChoiceConditionalQuestion(initialOptions, condition);
 
         when(personalityTestRepository.getAllQuestions()).thenReturn(asList(
                 new Question("How should your potential partner respond to this question?", INTROVERSION_CATEGORY, singleChoice),
@@ -96,7 +98,7 @@ public class PersonalityTestServiceTest {
         assertNotNull(numberRangeQuestion.getRange());
         assertNotNull(singleChoiceConditionalQuestion.getOptions());
         assertNotNull(singleChoiceConditionalQuestion.getCondition());
-        assertNotNull(singleChoiceConditionalQuestion.getConditionalQuestion());
+//        assertNotNull(singleChoiceConditionalQuestion.getConditionalQuestion());
     }
 
     @Test
@@ -107,6 +109,7 @@ public class PersonalityTestServiceTest {
 
         personalityTestService.saveTestAnswers(personalityTestAnswers);
 
-        verify(personalityTestRepository, times(1)).saveTestAnswer(personalityTestAnswers);
+        verify(personalityTestRepository, times(1))
+                .saveTestAnswer(personalityTestAnswers);
     }
 }

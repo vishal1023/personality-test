@@ -6,29 +6,27 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public class NumberRangeAnswer implements AnswerType {
 
     private String type;
-    private int answer;
+    private int from;
+    private int to;
 
     private NumberRangeAnswer() {
     }
 
-    public NumberRangeAnswer(String type, int answer) {
+    public NumberRangeAnswer(String type, int from, int to) {
         this.type = type;
-        this.answer = answer;
+        this.from = from;
+        this.to = to;
     }
 
     public String getType() {
         return type;
     }
 
-    public int getAnswer() {
-        return answer;
+    public int getFrom() {
+        return from;
     }
 
-    @Override
-    public String toString() {
-        return "NumberRangeAnswer{" +
-                "type='" + type + '\'' +
-                ", answer=" + answer +
-                '}';
+    public int getTo() {
+        return to;
     }
 }

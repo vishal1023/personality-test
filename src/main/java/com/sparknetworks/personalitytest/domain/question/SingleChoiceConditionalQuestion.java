@@ -6,34 +6,34 @@ import java.util.List;
 import java.util.Objects;
 
 @JsonDeserialize
-public class SingleChoiceConditionalQuestion extends SingleChoiceQuestion implements QuestionType {
+public class SingleChoiceConditionalQuestion extends SingleChoiceQuestion {
 
     private Condition condition;
-    private Question conditionalQuestion;
+//    private Question conditionalQuestion;
 
     private SingleChoiceConditionalQuestion() {
         super(null);
     }
 
-    public SingleChoiceConditionalQuestion(List<String> options, Condition condition, Question conditionalQuestion) {
+    public SingleChoiceConditionalQuestion(List<String> options, Condition condition) {
         super(options);
         this.condition = condition;
-        this.conditionalQuestion = conditionalQuestion;
+//        this.conditionalQuestion = conditionalQuestion;
     }
 
     public Condition getCondition() {
         return condition;
     }
 
-    public Question getConditionalQuestion() {
-        return conditionalQuestion;
-    }
+//    public Question getConditionalQuestion() {
+//        return conditionalQuestion;
+//    }
 
     @Override
     public String toString() {
         return "SingleChoiceConditionalQuestion{" +
                 "condition=" + condition +
-                ", conditionalQuestion=" + conditionalQuestion +
+//                ", conditionalQuestion=" + conditionalQuestion +
                 '}';
     }
 
@@ -43,12 +43,12 @@ public class SingleChoiceConditionalQuestion extends SingleChoiceQuestion implem
         if (!(o instanceof SingleChoiceConditionalQuestion)) return false;
         if (!super.equals(o)) return false;
         SingleChoiceConditionalQuestion that = (SingleChoiceConditionalQuestion) o;
-        return Objects.equals(condition, that.condition) &&
-                Objects.equals(conditionalQuestion, that.conditionalQuestion);
+        return Objects.equals(condition, that.condition);
+//                Objects.equals(conditionalQuestion, that.conditionalQuestion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), condition, conditionalQuestion);
+        return Objects.hash(super.hashCode(), condition);
     }
 }

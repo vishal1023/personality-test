@@ -1,11 +1,17 @@
 package com.sparknetworks.personalitytest.domain.question;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.util.Objects;
 
+@JsonDeserialize
 public class Range<T extends Number> {
 
-    private final T from;
-    private final T to;
+    private T from;
+    private T to;
+
+    private Range() {
+    }
 
     public Range(T from, T to) {
         this.from = from;

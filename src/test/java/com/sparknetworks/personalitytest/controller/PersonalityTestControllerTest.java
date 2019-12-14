@@ -72,10 +72,10 @@ public class PersonalityTestControllerTest {
                 .andExpect(jsonPath("$.questions", hasSize(2)))
                 .andExpect(jsonPath("$.categories", hasItem("hard_fact")))
                 .andExpect(jsonPath("$.categories", hasItem("lifestyle")))
-                .andExpect(jsonPath("$.questions[0].questionText")
+                .andExpect(jsonPath("$.questions[0].question")
                         .value("How should your potential partner respond to this question?"))
                 .andExpect(jsonPath("$.questions[0]category").value("hard_fact"))
-                .andExpect(jsonPath("$.questions[1].questionText")
+                .andExpect(jsonPath("$.questions[1].question")
                         .value("Do any children under the age of 18 live with you?"))
                 .andExpect(jsonPath("$.questions[1]category").value("lifestyle"));
     }
@@ -127,8 +127,8 @@ public class PersonalityTestControllerTest {
     private List<Answer> getAnswers() {
         AnswerType singleChoiceAnswer = new SingleChoiceAnswer("SingleChoice", "Yes");
         AnswerType singleChoiceConditional = new SingleChoiceConditionalAnswer(
-                "single_choice_conditional", "Yes", true, singleChoiceAnswer);
-        AnswerType numberRangeAnswer = new NumberRangeAnswer("number_range", 25);
+                "single_choice_conditional", "Yes", singleChoiceAnswer);
+        AnswerType numberRangeAnswer = new NumberRangeAnswer("number_range", 25, 30);
 
         Answer answer1 = new Answer("a1", singleChoiceAnswer);
         Answer answer2 = new Answer("b1", singleChoiceAnswer);

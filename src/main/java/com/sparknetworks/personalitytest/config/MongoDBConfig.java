@@ -30,27 +30,8 @@ public class MongoDBConfig {
     private PersonalityTestQuestions getPersonalityTestQuestionFromJSON() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         PersonalityTestQuestions personalityTestQuestions = objectMapper.
-                readValue(new File("D:/personality_test.json"), PersonalityTestQuestions.class);
+        readValue(new File("src\\main\\resources\\personality_test_initial_questions.json"), PersonalityTestQuestions.class);
         System.out.println("personalityTestQuestions = " + personalityTestQuestions.getQuestions().toString());
         return personalityTestQuestions;
     }
-//    @Bean
-//    CommandLineRunner commandLineRunner1(AnswerRepository repository) {
-//        return args ->
-//                repository.save(new PersonalityTestAnswers(new PersonalityTestKey("user1", "test1"), getAnswers()));
-//    }
-//
-//    private List<Answer> getAnswers() {
-//        AnswerType singleChoiceAnswer = new SingleChoiceAnswer("SingleChoice", "Yes");
-//        AnswerType singleChoiceConditional = new SingleChoiceConditionalAnswer(
-//                "single_choice_conditional", "Yes", true, singleChoiceAnswer);
-//        AnswerType numberRangeAnswer = new NumberRangeAnswer("number_range", 25);
-//
-//        Answer answer1 = new Answer("a1", singleChoiceAnswer);
-//        Answer answer2 = new Answer("b1", singleChoiceAnswer);
-//        Answer answer3 = new Answer("c1", singleChoiceConditional);
-//        Answer answer4 = new Answer("d1", numberRangeAnswer);
-//
-//        return Arrays.asList(answer1, answer2, answer3, answer4);
-//    }
 }
