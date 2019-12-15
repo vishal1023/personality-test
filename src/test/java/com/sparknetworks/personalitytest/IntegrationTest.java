@@ -1,21 +1,25 @@
 package com.sparknetworks.personalitytest;
 
 import com.sparknetworks.personalitytest.domain.answer.*;
+import com.sparknetworks.personalitytest.domain.question.PersonalityTestQuestions;
 import com.sparknetworks.personalitytest.domain.question.Question;
+import com.sparknetworks.personalitytest.domain.question.SingleChoiceQuestion;
 import com.sparknetworks.personalitytest.repository.mongodb.PersonalityTestKey;
-import org.junit.Ignore;
+import com.sparknetworks.personalitytest.repository.mongodb.PersonalityTestMongoDBRepository;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,30 +29,53 @@ public class IntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
+    @Autowired
+    private PersonalityTestMongoDBRepository repository;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
+    @Before
+    public void setUp() {
+        repository.deleteAllQuestions();
+        repository.deleteAllAnswers();
+    }
 
-    @Ignore
+    @After
+    public void tearDown() {
+        repository.deleteAllQuestions();
+        repository.deleteAllAnswers();
+    }
+
     @Test
     public void shouldGetListOfQuestionForAllCategories() {
+        repository.addQuestion(new Question("What is your gender", "hard-fact",
+                new SingleChoiceQuestion(Arrays.asList("male", "female", "other"))));
 
-        ResponseEntity<Question[]> responseEntity =
-                this.restTemplate.getForEntity("/personality-test/questions", Question[].class);
+        ResponseEntity<PersonalityTestQuestions> responseEntity =
+                this.restTemplate.getForEntity("/personality-test/questions", PersonalityTestQuestions.class);
 
-        Question[] questions = responseEntity.getBody();
+
+        PersonalityTestQuestions questions = responseEntity.getBody();
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(Objects.requireNonNull(questions).length).isGreaterThan(0);
+        assert questions != null;
+        assertThat(questions.getQuestions().size()).isEqualTo(1);
     }
 
 
     @Test
     public void shouldSaveTestAnswers() {
+        deleteTestAnswerIfPresent();
         List<Answer> answers = getAnswers();
-        TestAnswers request = new PersonalityTestAnswers(new PersonalityTestKey("test1","user1"),answers);
+        TestAnswers request = new PersonalityTestAnswers(new PersonalityTestKey("test1", "user1"), answers);
         ResponseEntity<ResponseEntity> responseEntity =
                 restTemplate.postForEntity("/personality-test/answers", request, ResponseEntity.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    private void deleteTestAnswerIfPresent() {
+        restTemplate.delete("/personality-test/answers");
     }
 
     private List<Answer> getAnswers() {

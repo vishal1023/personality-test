@@ -47,4 +47,22 @@ public class PersonalityTestMongoDBRepository implements PersonalityTestReposito
         return answerRepository.findAll();
 
     }
+
+    @Override
+    public void deleteAllAnswers() {
+        answerRepository.deleteAll();
+        System.out.println("PersonalityTestMongoDBRepository.deleteAllAnswers");
+    }
+
+    @Override
+    public void deleteAllQuestions() {
+        questionRepository.deleteAll();
+        System.out.println("PersonalityTestMongoDBRepository.deleteAllQuestions");
+    }
+
+    @Override
+    public void addQuestion(Question question) {
+        System.out.println("PersonalityTestMongoDBRepository.addQuestion");
+        questionRepository.save(question);
+    }
 }

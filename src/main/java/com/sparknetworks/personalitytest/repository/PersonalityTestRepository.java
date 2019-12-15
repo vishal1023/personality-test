@@ -16,4 +16,10 @@ public interface PersonalityTestRepository {
     void saveTestAnswer(TestAnswers testAnswers);
 
     List<TestAnswers> getAllAns();
+
+    void deleteAllAnswers();
+
+    void deleteAllQuestions();
+
+    void addQuestion(Question question);
 }
