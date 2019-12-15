@@ -62,7 +62,6 @@ public class IntegrationTest {
         assertThat(questions.getQuestions().size()).isEqualTo(1);
     }
 
-
     @Test
     public void shouldSaveTestAnswers() {
         deleteTestAnswerIfPresent();
@@ -72,6 +71,20 @@ public class IntegrationTest {
                 restTemplate.postForEntity("/personality-test/answers", request, ResponseEntity.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
+    public void shouldReturnAllAnswers() {
+        TestAnswers request = new PersonalityTestAnswers(new PersonalityTestKey("test1", "user1"), getAnswers());
+        restTemplate.postForEntity("/personality-test/answers", request, ResponseEntity.class);
+
+        ResponseEntity<TestAnswers[]> responseEntity =
+                this.restTemplate.getForEntity("/personality-test/answers", TestAnswers[].class);
+
+        TestAnswers[] answers = responseEntity.getBody();
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assert answers != null;
+        assertThat(answers.length).isEqualTo(1);
     }
 
     private void deleteTestAnswerIfPresent() {
@@ -90,16 +103,5 @@ public class IntegrationTest {
         Answer answer4 = new Answer("d1", numberRangeAnswer);
 
         return Arrays.asList(answer1, answer2, answer3, answer4);
-    }
-
-    @Test
-    public void shouldReturnAllAnswers() {
-        ResponseEntity<TestAnswers[]> responseEntity =
-                this.restTemplate.getForEntity("/personality-test/answers", TestAnswers[].class);
-
-        TestAnswers[] body = responseEntity.getBody();
-        System.out.println("*********************************");
-        System.out.println(Arrays.toString(body));
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }
