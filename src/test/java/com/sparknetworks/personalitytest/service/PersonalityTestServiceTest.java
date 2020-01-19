@@ -2,6 +2,7 @@ package com.sparknetworks.personalitytest.service;
 
 import com.sparknetworks.personalitytest.domain.answer.*;
 import com.sparknetworks.personalitytest.domain.question.*;
+import com.sparknetworks.personalitytest.exception.NotFoundException;
 import com.sparknetworks.personalitytest.repository.PersonalityTestRepository;
 import com.sparknetworks.personalitytest.repository.mongodb.PersonalityTestKey;
 import org.junit.Before;
@@ -111,5 +112,24 @@ public class PersonalityTestServiceTest {
 
         verify(personalityTestRepository, times(1))
                 .saveTestAnswer(personalityTestAnswers);
+    }
+
+    @Test
+    public void shouldDeleteQuestionForGiveQuestionId() {
+        String questionId = "someQuestionId";
+        personalityTestService.deleteQuestion(questionId);
+
+        verify(personalityTestRepository, times(1))
+                .deleteQuestion(questionId);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldThrowRuntimeExceptionIfQuestionIdNotPresent() {
+        String questionId = "someQuestionId";
+        doThrow(new RuntimeException())
+                .when(personalityTestRepository)
+                .deleteQuestion(questionId);
+
+        personalityTestService.deleteQuestion(questionId);
     }
 }

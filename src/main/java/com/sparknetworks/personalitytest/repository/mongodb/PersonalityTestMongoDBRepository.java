@@ -62,4 +62,9 @@ public class PersonalityTestMongoDBRepository implements PersonalityTestReposito
     public void addQuestion(Question question) {
         questionRepository.save(question);
     }
+
+    @Override
+    public void deleteQuestion(String questionId) {
+        questionRepository.deleteById(questionId);
+    }
 }

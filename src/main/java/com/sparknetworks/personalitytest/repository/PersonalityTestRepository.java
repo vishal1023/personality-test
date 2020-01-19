@@ -22,4 +22,6 @@ public interface PersonalityTestRepository {
     void deleteAllQuestions();
 
     void addQuestion(Question question);
+
+    void deleteQuestion(String questionId);
 }

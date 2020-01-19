@@ -3,6 +3,7 @@ package com.sparknetworks.personalitytest.service;
 import com.sparknetworks.personalitytest.domain.answer.TestAnswers;
 import com.sparknetworks.personalitytest.domain.question.PersonalityTestQuestions;
 import com.sparknetworks.personalitytest.domain.question.Question;
+import com.sparknetworks.personalitytest.exception.NotFoundException;
 import com.sparknetworks.personalitytest.repository.PersonalityTestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,13 @@ public class PersonalityTestService {
 
     public void deleteTestAnswers() {
         personalityTestRepository.deleteAllAnswers();
+    }
+
+    public void deleteQuestion(String questionId) {
+        try {
+            personalityTestRepository.deleteQuestion(questionId);
+        } catch (Exception e) {
+            throw new NotFoundException();
+        }
     }
 }

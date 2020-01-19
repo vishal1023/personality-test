@@ -6,6 +6,7 @@ import com.sparknetworks.personalitytest.domain.question.PersonalityTestQuestion
 import com.sparknetworks.personalitytest.domain.question.Question;
 import com.sparknetworks.personalitytest.domain.question.QuestionType;
 import com.sparknetworks.personalitytest.domain.question.SingleChoiceQuestion;
+import com.sparknetworks.personalitytest.exception.NotFoundException;
 import com.sparknetworks.personalitytest.repository.mongodb.PersonalityTestKey;
 import com.sparknetworks.personalitytest.service.PersonalityTestService;
 import org.junit.Before;
@@ -31,10 +32,8 @@ import static java.util.Collections.emptySet;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -122,6 +121,24 @@ public class PersonalityTestControllerTest {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+    @Test
+    public void shouldDeleteQuestionUsingQuestionID() throws Exception {
+        this.mockMvc.perform(delete("/personality-test/questions/questionOne"))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void shouldReturnHTTP_STATUS_NOT_FOUND_IfQuestionNotPresent() throws Exception {
+        String questionId = "someQuestionId";
+        doThrow(new NotFoundException())
+                .when(this.personalityTestService)
+                .deleteQuestion(questionId);
+        this.mockMvc.perform(delete("/personality-test/questions/"+questionId))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     private List<Answer> getAnswers() {

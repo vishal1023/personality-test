@@ -4,6 +4,7 @@ import com.sparknetworks.personalitytest.domain.answer.TestAnswers;
 import com.sparknetworks.personalitytest.domain.question.PersonalityTestQuestions;
 import com.sparknetworks.personalitytest.domain.question.Question;
 import com.sparknetworks.personalitytest.exception.CategoryNotFoundException;
+import com.sparknetworks.personalitytest.exception.NotFoundException;
 import com.sparknetworks.personalitytest.service.PersonalityTestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +63,12 @@ public class PersonalityTestController {
         return new ResponseEntity(OK);
     }
 
+    @DeleteMapping("/personality-test/questions/{questionId}")
+    public ResponseEntity deleteQuestion(@PathVariable(value = "questionId") String questionId){
+        personalityTestService.deleteQuestion(questionId);
+        return new ResponseEntity(OK);
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public void handle(com.mongodb.MongoWriteException e) {
@@ -72,5 +79,11 @@ public class PersonalityTestController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handleBadRequest(HttpMessageNotReadableException e) {
         logger.error("Returning HTTP 400 Bad Request" + e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public void handleNotFound(NotFoundException e) {
+        logger.error("Resource not found" + e.getMessage());
     }
 }
